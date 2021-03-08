@@ -85,7 +85,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({errorMessage: 'Incorrect Password'})
     }
   
-    res.json({success: 'Logged In'})
+    res.json({success: 'Logged In', user})
   
   } catch (error) {
     console.log(error)
