@@ -64,27 +64,32 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(422).json({ messageError: "Please include all required fields" });
-  }
-
-  const user = await User.findOne({
-    where: {
-      email,
-    },
-  });
-
-  if (!user) {
-    return res.status(404).json({ messageError: "Could not find user with that email" });
-  }
-
-  const match = await bcrypt.compare(password, user.password)
+  try {
+    if (!email || !password) {
+      return res.status(422).json({ messageError: "Please include all required fields" });
+    }
   
-  if(!match){
-    res.json({errorMessage: 'Incorrect Password'})
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+    });
+  
+    if (!user) {
+      return res.status(404).json({ messageError: "Could not find user with that email" });
+    }
+  
+    const match = await bcrypt.compare(password, user.password)
+    
+    if(!match){
+      return res.status(401).json({errorMessage: 'Incorrect Password'})
+    }
+  
+    res.json({success: 'Logged In'})
+  
+  } catch (error) {
+    console.log(error)
   }
-
-  res.json({success: 'Logged In'})
 
 });
 
