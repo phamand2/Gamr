@@ -1,4 +1,3 @@
-const { fake } = require("faker");
 const faker = require("faker");
 
 module.exports = {

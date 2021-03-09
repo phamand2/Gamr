@@ -61,6 +61,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
+//localhost:3000/users/login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -85,7 +87,10 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({errorMessage: 'Incorrect Password'})
     }
   
-    res.json({success: 'Logged In', user})
+    req.session.user = user
+
+
+    res.json({success: 'Log In'})
   
   } catch (error) {
     console.log(error)
