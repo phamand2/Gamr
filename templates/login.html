@@ -12,7 +12,7 @@
 <body>
   <h1>Gamr</h1>
   <p>Welcome to Gamr</p>
-
+  ${error ? `<em>${error}</em>`: ''}
   <form action="/users/login" method='POST'>
     <h2>Login</h2>
     <p>

@@ -62,13 +62,22 @@ router.post("/register", async (req, res) => {
 });
 
 
+router.get('/login', async (req,res)=> {
+  res.render('login', {
+    locals:{
+      error: null
+    }
+  })
+})
+
+
 //localhost:3000/users/login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
     if (!email || !password) {
-      return res.status(422).json({ messageError: "Please include all required fields" });
+      return res.status(422).json({ error: "Please include all required fields" });
     }
   
     const user = await User.findOne({
@@ -78,7 +87,7 @@ router.post("/login", async (req, res) => {
     });
   
     if (!user) {
-      return res.status(404).json({ messageError: "Could not find user with that email" });
+      return res.status(404).json({ error: "Could not find user with that email" });
     }
   
     const match = await bcrypt.compare(password, user.password)
@@ -88,14 +97,21 @@ router.post("/login", async (req, res) => {
     }
   
     req.session.user = user
+    res.redirect('/games')
 
-
-    res.json({success: 'Log In'})
   
   } catch (error) {
     console.log(error)
   }
 
 });
+
+
+//localhost:3000/users/logout
+
+router.get('/logout', (req,res)=>{
+  req.session.user = null
+  res.redirect('/users/login')
+})
 
 module.exports = router;
